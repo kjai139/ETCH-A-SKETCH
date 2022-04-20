@@ -95,10 +95,13 @@ GridArray.forEach(element => {
     })
     
     element.addEventListener('mousedown', () => {
-        if (randomColor == true){
+        if (randomColor == true && element.classList.contains('colored') == false){
+            element.classList.add('colored')
             element.style.backgroundColor = `rgb(${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)})`
-        } else if (randomColor == false){
+        } else if (randomColor == false && element.classList.contains('colored') == false){
+            element.classList.add('colored')
             element.style.backgroundColor = 'black'
+            
         }
         
         GridArray.forEach(element => {
@@ -145,9 +148,10 @@ resetBtn.addEventListener('click', () => {
             })
             
             element.addEventListener('mousedown', () => {
-                if (randomColor == true){
+                if (randomColor == true && element.classList.contains('colored') == false){
                     element.style.backgroundColor = `rgb(${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)})`
-                } else if (randomColor == false){
+                } else if (randomColor == false && element.classList.contains('colored') == false){
+                    element.classList.add('colored')
                     element.style.backgroundColor = 'black'
                 }
                 
