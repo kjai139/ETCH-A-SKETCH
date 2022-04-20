@@ -1,3 +1,7 @@
+let randomColor = false
+let brightN = 100
+
+
 let outerContainer = document.createElement('div')
 outerContainer.setAttribute('class', 'outerContainer')
 document.body.appendChild(outerContainer)
@@ -8,7 +12,22 @@ bodyContainer.setAttribute('class', 'container')
 outerContainer.appendChild(bodyContainer)
 
 bodyContainer.style.display = 'grid'
-bodyContainer.style.gap = '1px'
+bodyContainer.style.gap = '0px'
+
+let btnDiv = document.createElement('div')
+btnDiv.setAttribute('class', 'btnDiv')
+document.body.insertBefore(btnDiv, outerContainer)
+
+let resetBtn = document.createElement('button')
+resetBtn.setAttribute('class', 'resetBtn')
+resetBtn.textContent = 'NEW CANVAS'
+btnDiv.appendChild(resetBtn)
+
+let randomBtn = document.createElement('button')
+randomBtn.setAttribute('class', 'randomBtn')
+randomBtn.textContent = 'Use Random RGB brush'
+btnDiv.appendChild(randomBtn)
+
 
 
 
@@ -20,10 +39,12 @@ let createGrid = (x, y) => {
         newDiv.setAttribute('class', 'gridDivs')
         bodyContainer.appendChild(newDiv)
         bodyContainer.style.gridTemplateColumns = `repeat(${y}, 1fr)`
-        bodyContainer.style.gridTemplateRows = `repeat(${x}, 1fr)`
+        //bodyContainer.style.gridTemplateRows = `repeat(${x}, 1fr)`
 
     }
 }
+
+
 
 
 
@@ -33,10 +54,31 @@ createGrid(16, 16)
 let allGrids = document.querySelectorAll('.gridDivs')
 let GridArray = Array.from(allGrids)
 
-let redHover = (element) => {
-    element=element.target
-    element.style.backgroundColor = 'red'
+let brightnessReduct = (v) =>{
+    brightN -=-v
 }
+
+let whiteHover = (element) => {
+    element=element.target
+    if (randomColor == false){
+        element.style.backgroundColor = 'black'
+        element.classList.add('colored')
+    }
+    else if (randomColor == true && element.classList.contains('colored') == false) {
+        //console.log(Math.floor(Math.random() * 256))
+      
+        element.style.backgroundColor = `rgb(${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)})`
+        element.classList.add('colored')
+        
+        
+       
+    }
+    //else if (randomColor == true && element.classList.contains('colored') == true) {
+        element.style.filter = 'brightness('
+    //}
+}
+
+
 
 
 GridArray.forEach(element => {
@@ -49,15 +91,86 @@ GridArray.forEach(element => {
     })
     
     element.addEventListener('mousedown', () => {
-        let mousedown = true
-        element.style.backgroundColor = 'red'
+        if (randomColor == true){
+            element.style.backgroundColor = `rgb(${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)})`
+        } else if (randomColor == false){
+            element.style.backgroundColor = 'black'
+        }
+        
         GridArray.forEach(element => {
-            if (mousedown == true) {
-                element.addEventListener('mouseover', redHover)
-            }
+                
+                    element.addEventListener('mouseover', whiteHover)
+                
+                
+            
+        })
+        window.addEventListener('mouseup', () => {
+            
+            GridArray.forEach(element => {
+                element.removeEventListener('mouseover', whiteHover)
+            })
         })
         
         
     })
     
+})
+
+resetBtn.addEventListener('click', () => {
+    randomColor = false
+    GridArray.forEach(element => {
+        element.style.backgroundColor = 'white'
+    })
+    let newInp = prompt('Please enter a number for the new square grid: (max = 100)')
+    
+    if (newInp.length < 4 && Number(newInp) <= 100){
+        let x = newInp
+        let y = newInp
+        console.log(x, y)
+        bodyContainer.textContent = ''
+        createGrid(x, y)
+        allGrids = document.querySelectorAll('.gridDivs')
+        GridArray = Array.from(allGrids)
+        GridArray.forEach(element => {
+            element.addEventListener('mouseover', mouseOver =() => {
+                element.classList.add('hoverOver')
+                element.addEventListener('mouseout', hoverOver =() => {
+                    element.classList.remove('hoverOver')
+                })
+                
+            })
+            
+            element.addEventListener('mousedown', () => {
+                if (randomColor == true){
+                    element.style.backgroundColor = `rgb(${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)})`
+                } else if (randomColor == false){
+                    element.style.backgroundColor = 'black'
+                }
+                
+                
+                GridArray.forEach(element => {
+                        
+                            element.addEventListener('mouseover', whiteHover)
+                        
+                        
+                    
+                })
+                window.addEventListener('mouseup', () => {
+                    
+                    GridArray.forEach(element => {
+                        element.removeEventListener('mouseover', whiteHover)
+                    })
+                })
+                
+                
+            })
+            
+        })
+    } else if (newInp.length < 1 || newInp == null || typeof(newInp) != 'number') {
+        alert('Invalid Number')
+    }
+})
+
+randomBtn.addEventListener('click', () => {
+    randomColor = true
 })
