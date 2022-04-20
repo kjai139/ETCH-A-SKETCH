@@ -20,12 +20,17 @@ document.body.insertBefore(btnDiv, outerContainer)
 
 let resetBtn = document.createElement('button')
 resetBtn.setAttribute('class', 'resetBtn')
-resetBtn.textContent = 'NEW CANVAS'
+resetBtn.textContent = 'New Canvas'
 btnDiv.appendChild(resetBtn)
+
+let blackBtn = document.createElement('button')
+blackBtn.setAttribute('class', 'blackbtn')
+blackBtn.textContent = 'Use black brush'
+btnDiv.appendChild(blackBtn)
 
 let randomBtn = document.createElement('button')
 randomBtn.setAttribute('class', 'randomBtn')
-randomBtn.textContent = 'Use Random RGB brush'
+randomBtn.textContent = 'Use random RGB brush'
 btnDiv.appendChild(randomBtn)
 
 
@@ -54,11 +59,9 @@ createGrid(16, 16)
 let allGrids = document.querySelectorAll('.gridDivs')
 let GridArray = Array.from(allGrids)
 
-let brightnessReduct = (v) =>{
-    brightN -=-v
-}
 
-let whiteHover = (element) => {
+
+let colorHover = (element) => {
     element=element.target
     if (randomColor == false){
         element.style.backgroundColor = 'black'
@@ -69,13 +72,14 @@ let whiteHover = (element) => {
       
         element.style.backgroundColor = `rgb(${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)})`
         element.classList.add('colored')
-        
+        element.id = '100'
         
        
     }
-    //else if (randomColor == true && element.classList.contains('colored') == true) {
-        element.style.filter = 'brightness('
-    //}
+    else if (randomColor == true && element.classList.contains('colored') == true && Number(element.id) > 0) {
+        element.style.filter = `brightness(${Number(element.id) - 10}%)`
+        element.id = Number(element.id) - 10
+    }
 }
 
 
@@ -99,7 +103,7 @@ GridArray.forEach(element => {
         
         GridArray.forEach(element => {
                 
-                    element.addEventListener('mouseover', whiteHover)
+                    element.addEventListener('mouseover', colorHover)
                 
                 
             
@@ -107,7 +111,7 @@ GridArray.forEach(element => {
         window.addEventListener('mouseup', () => {
             
             GridArray.forEach(element => {
-                element.removeEventListener('mouseover', whiteHover)
+                element.removeEventListener('mouseover', colorHover)
             })
         })
         
@@ -121,7 +125,7 @@ resetBtn.addEventListener('click', () => {
     GridArray.forEach(element => {
         element.style.backgroundColor = 'white'
     })
-    let newInp = prompt('Please enter a number for the new square grid: (max = 100)')
+    let newInp = prompt('Please enter the canvas dimension: (ex: 40 for 40x40. Max = 100)')
     
     if (newInp.length < 4 && Number(newInp) <= 100){
         let x = newInp
@@ -150,7 +154,7 @@ resetBtn.addEventListener('click', () => {
                 
                 GridArray.forEach(element => {
                         
-                            element.addEventListener('mouseover', whiteHover)
+                            element.addEventListener('mouseover', colorHover)
                         
                         
                     
@@ -158,7 +162,7 @@ resetBtn.addEventListener('click', () => {
                 window.addEventListener('mouseup', () => {
                     
                     GridArray.forEach(element => {
-                        element.removeEventListener('mouseover', whiteHover)
+                        element.removeEventListener('mouseover', colorHover)
                     })
                 })
                 
@@ -173,4 +177,8 @@ resetBtn.addEventListener('click', () => {
 
 randomBtn.addEventListener('click', () => {
     randomColor = true
+})
+
+blackBtn.addEventListener('click', () => {
+    randomColor = false
 })
