@@ -97,6 +97,7 @@ GridArray.forEach(element => {
     element.addEventListener('mousedown', () => {
         if (randomColor == true && element.classList.contains('colored') == false){
             element.classList.add('colored')
+            element.id = '100'
             element.style.backgroundColor = `rgb(${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)})`
         } else if (randomColor == false && element.classList.contains('colored') == false){
             element.classList.add('colored')
